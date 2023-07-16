@@ -1,6 +1,6 @@
-# Inventario (inventariof)
+# Gestión Estudiantil
 
-Sistema automatizado de gentión de inventario
+Sistema automatizado de gentión estudiantil
 
 ## Install the dependencies
 ```bash
