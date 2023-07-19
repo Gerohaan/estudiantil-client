@@ -12,7 +12,7 @@ const routes = [
     path: '/Inicio',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Inicio.vue') }
+      { path: '', component: () => import('pages/Inicio.vue'), meta: { requiresAuth: true } }
     ]
   },
 

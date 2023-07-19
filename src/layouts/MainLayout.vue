@@ -31,7 +31,7 @@
           header
           class="text-grey-8"
         >
-        Usuario Docente
+        Usuario Administrador
         </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
@@ -55,27 +55,69 @@ const linksData = [
     title: 'Inicio',
     caption: '',
     icon: 'home',
-    link: ''
+    link: '',
+    method: ''
   },
   {
-    title: 'Usuarios',
+    title: 'Perfil',
+    caption: '',
+    icon: 'account_circle',
+    link: '',
+    method: ''
+  },
+  {
+    title: 'Registrar Usuario',
+    caption: '',
+    icon: 'person_add',
+    link: '',
+    method: ''
+  },
+  {
+    title: 'Inscribir',
+    caption: '',
+    icon: 'event_note',
+    link: '',
+    method: ''
+  },
+  {
+    title: 'Académico',
+    caption: '',
+    icon: 'school',
+    link: '',
+    method: ''
+  },
+  {
+    title: 'Carga de documentos',
+    caption: '',
+    icon: 'drive_folder_upload',
+    link: '',
+    method: ''
+  },
+  /* {
+    title: 'Calendario Académico',
+    caption: '',
+    icon: 'calendar_month',
+    link: ''
+  }, */
+  /* {
+    title: 'Alumnos',
     caption: '',
     icon: 'person',
     link: ''
-  },
-  {
-    title: 'Inscripción',
+  }, */
+  /* {
+    title: 'Mis Notas',
     caption: '',
     icon: 'file_open',
     link: ''
-  },
-  {
+  }, */
+  /* {
     title: 'Planificación',
     caption: '',
     icon: 'view_kanban',
     link: ''
-  },
-  {
+  }, */
+  /* {
     title: 'Académico',
     caption: '',
     icon: 'school',
@@ -86,12 +128,14 @@ const linksData = [
     caption: '',
     icon: 'settings',
     link: ''
-  },
+  }, */
+  
   {
     title: 'Salir',
     caption: '',
     icon: 'logout',
-    link: ''
+    link: '',
+    method: 'logout()'
   }
 ]
 
@@ -105,6 +149,22 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: linksData
     }
+  },
+  methods: {
+    logout() {
+      this.$q.dialog({
+        title: 'Cerrar sesión',
+        message: '¿Estas seguro de querer salir de la aplicación?',
+        cancel: true,
+        persistent: false,
+        className: 'dialog-bg-red text-white'
+      }).onOk(() => {
+      }).onOk(() => {
+        this.logoutConfirm()
+      }).onCancel(() => {
+      }).onDismiss(() => {
+      })
+    },
   }
 }
 </script>
