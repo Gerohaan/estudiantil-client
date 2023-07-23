@@ -23,7 +23,7 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      :width="200"
+      :width="230"
       content-class="bg-grey-1"
     >
       <q-list>
@@ -31,13 +31,135 @@
           header
           class="text-grey-8"
         >
-        Usuario Administrador
-        </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+          {{ auth.persona.name }} {{ auth.persona.surname }}
+        <q-item-label caption>
+          {{ internalRol }}
+        </q-item-label>  
+      </q-item-label>
+        <q-item
+          clickable
+          to="/inicio/"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="home" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Inicio</q-item-label>
+            <q-item-label caption>
+              <!-- caption menú -->
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          to="/inicio/perfil"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="account_circle" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Perfil</q-item-label>
+            <q-item-label caption>
+              <!-- caption menú -->
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          tag="a"
+          to="/inicio/registro-usuarios"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="person" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Usuarios</q-item-label>
+            <q-item-label caption>
+              <!-- caption menú -->
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          tag="a"
+          href="#"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="event_note" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Inscribir</q-item-label>
+            <q-item-label caption>
+             <!--  caption menú -->
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          tag="a"
+          href="#"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="school" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Académico</q-item-label>
+            <q-item-label caption>
+              <!-- caption menú -->
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          tag="a"
+          href="#"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="drive_folder_upload" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Carga de documentos</q-item-label>
+            <q-item-label caption>
+              <!-- caption menú -->
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          tag="a"
+          @click="logout()"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="logout" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Salir</q-item-label>
+            <q-item-label caption>
+              <!-- caption menú -->
+            </q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -49,6 +171,8 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
+import { Dialog } from 'quasar'
+import { Notify } from 'quasar'
 
 const linksData = [
   {
@@ -150,11 +274,33 @@ export default {
       essentialLinks: linksData
     }
   },
+  computed:{
+    auth() {
+      return this.$store.getters["auth/getUserData"];
+    },
+    internalRol(){
+      switch (this.auth.type) {
+        case "Teacher":
+          return "Docente"
+        break;
+        case "Student":
+          return "Estudiante"
+        break;
+        case "Admin":
+          return "Administrador"
+        break;
+      
+        default:
+          return "Usuario"
+          break;
+      }
+    }
+  },
   methods: {
     logout() {
       this.$q.dialog({
         title: 'Cerrar sesión',
-        message: '¿Estas seguro de querer salir de la aplicación?',
+        message: '¿Quiere salir de la aplicación?',
         cancel: true,
         persistent: false,
         className: 'dialog-bg-red text-white'
@@ -164,6 +310,28 @@ export default {
       }).onCancel(() => {
       }).onDismiss(() => {
       })
+    },
+
+    logoutConfirm() {
+      const token = {}
+      token.token = localStorage.getItem('token')
+      this.$store.dispatch('auth/logout', token)
+        .then((resp) => {
+          Notify.create(
+            { message: 'Sesión cerrada.', 
+              type: 'positive', 
+              position: 'top-right'
+          })
+          this.$RoutePush('/')
+        })
+        .catch((err) => {
+          console.log(err)
+          Notify.create(
+            { message: err.message, 
+              type: 'positive', 
+              position: 'top-right'
+          })
+        })
     },
   }
 }

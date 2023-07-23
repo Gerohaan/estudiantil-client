@@ -12,7 +12,9 @@ const routes = [
     path: '/Inicio',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Inicio.vue'), meta: { requiresAuth: true } }
+      { path: '/', component: () => import('pages/Inicio.vue'), meta: { requiresAuth: true } },
+      { path: 'perfil', component: () => import('pages/Perfil.vue'), meta: { requiresAuth: true } },
+      { path: 'registro-usuarios', component: () => import('pages/UsuarioRegistro.vue'), meta: { requiresAuth: true } }
     ]
   },
 

@@ -65,32 +65,11 @@ export async function login (data, callBack, errorCallBack) {
   } catch (error) {
     return errorCallBack(error)
   }
-  
-  /* axios({ url: url + '/user/login', data: data, method: 'POST' })
-    .then(response => {
-      callBack(response)
-    })
-    .catch(err => {
-      if (errorCallBack != null) {
-        console.log(err)
-        if (err.response.data.error) {
-          errorCallBack(err.response.data.error)
-        }
-        if (err.response.data.error) {
-          if (err.response.data.error.username) {
-            errorCallBack(err.response.data.error.username[0])
-          }
-          if (err.response.data.error.password) {
-            errorCallBack(err.response.data.error.password[0])
-          }
-        }
-      }
-    }) */
 }
 
 export function logouts (data, callBack, errorCallBack) {
   const newToken = data.token.replace('"', ' ')
-  axios({ url: url + '/logout', data: data, method: 'POST', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
+  axios({ url: url + '/user/logout', data: data, method: 'POST', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
     .then(response => {
       callBack(response)
     })
@@ -121,7 +100,7 @@ export function editProfile (data, callBack, errorCallBack) {
 export function getAllUser (callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''
   const newToken = token.replace('"', ' ')
-  axios({ url: url + '/userAll', method: 'GET', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
+  axios({ url: url + '/user/list', method: 'GET', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
     .then(response => {
       callBack(response)
     })

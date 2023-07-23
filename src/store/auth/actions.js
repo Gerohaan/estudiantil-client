@@ -35,6 +35,7 @@ export function logout ({ commit }, data) {
       commit('logout')
       resolve()
     }, (err) => {
+      console.log(err)
       reject(err)
     })
   })
@@ -74,7 +75,7 @@ export function filterUser ({ commit }, data) {
 export function getAllUsers ({ commit }) {
   return new Promise((resolve, reject) => {
     return getAllUser((response) => {
-      commit('setAllUser', response.data.users.data)
+      commit('setAllUser', response.data)
       resolve(response)
     }, (err) => {
       reject(err)
