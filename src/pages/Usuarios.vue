@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import index from 'components/user/index.vue'
+import index from 'components/users/index.vue'
 export default {
   components: { index },
-  name: 'UsuarioRegistro'
+  name: 'Usuarios'
 }
 </script>

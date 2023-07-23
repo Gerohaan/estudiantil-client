@@ -73,7 +73,7 @@
         <q-item
           clickable
           tag="a"
-          to="/inicio/registro-usuarios"
+          to="/inicio/usuarios"
         >
           <q-item-section
             avatar

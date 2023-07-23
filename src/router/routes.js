@@ -14,7 +14,7 @@ const routes = [
     children: [
       { path: '/', component: () => import('pages/Inicio.vue'), meta: { requiresAuth: true } },
       { path: 'perfil', component: () => import('pages/Perfil.vue'), meta: { requiresAuth: true } },
-      { path: 'registro-usuarios', component: () => import('pages/UsuarioRegistro.vue'), meta: { requiresAuth: true } }
+      { path: 'usuarios', component: () => import('pages/Usuarios.vue'), meta: { requiresAuth: true } }
     ]
   },
 

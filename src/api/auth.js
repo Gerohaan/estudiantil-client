@@ -7,7 +7,7 @@ var url = domain
 export function register (data, callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''
   const newToken = token.replace('"', ' ')
-  axios({ url: url + '/register', data: data, method: 'POST', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
+  axios({ url: url + '/user/add', data: data, method: 'POST', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
     .then(response => {
       callBack(response)
     })
@@ -115,7 +115,7 @@ export function getAllUser (callBack, errorCallBack) {
 export function deleteUser (data, callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''
   const newToken = token.replace('"', ' ')
-  axios({ url: url + '/deleteUser', data: data, method: 'POST', headers: { Authorization: 'Bearer ' + newToken } })
+  axios({ url: url + '/user/delete/'+data, method: 'DELETE', headers: { Authorization: 'Bearer ' + newToken } })
     .then(response => {
       callBack(response)
     })
