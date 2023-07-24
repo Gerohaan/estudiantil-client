@@ -85,7 +85,7 @@ export function logouts (data, callBack, errorCallBack) {
 export function editProfile (data, callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''
   const newToken = token.replace('"', ' ')
-  axios({ url: url + '/user/edit', data: data, method: 'POST', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
+  axios({ url: url + '/user/update/'+data.id, data: data, method: 'PUT', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
     .then(response => {
       callBack(response)
     })

@@ -8,14 +8,14 @@
       </div>
       <div class="row">
         <div class="col-12 text-left q-pa-xs">
-            <p class="text-bold"><q-icon name="group" size="sm" color="primary"></q-icon>  Listado de usuarios</p>      
+            <p class="text-bold"><q-icon name="date_range" size="sm" color="primary"></q-icon>Listado de lapsos</p>      
         </div>
       </div>
       <div class="row">
         <div class="col-12 q-pa-xs">
           <q-table
             title=""
-            :data="getAllUser"
+            :data="getAllLapses"
             :columns="columns"
             row-key="name"
             :filter="filter"
@@ -38,34 +38,19 @@
               </q-input>
             </template>
             <template v-slot:body="props">
-              <q-tr :props="props" v-if="props.row.persona.email !== auth.persona.email">
+              <q-tr :props="props">
                 <q-td key="name" :props="props">
-                  {{ props.row.persona.name }}
+                  {{ props.row.name }}
                 </q-td>
-                <q-td key="surname" :props="props">
-                  {{ props.row.persona.surname }}
+                <q-td key="start_date" :props="props">
+                  {{ props.row.start_date }}
                 </q-td>
-                <q-td key="gender" :props="props">
-                  {{ props.row.persona.gender }}
-                </q-td>
-                <q-td key="type" :props="props">
-                  {{ internalRolMethod(props.row.type) }}
-                </q-td>
-                <q-td key="document" :props="props">
-                  {{ props.row.persona.document }}
-                </q-td>
-                <q-td key="phone" :props="props">
-                  {{ props.row.persona.phone }}
-                </q-td>
-                <q-td key="email" :props="props">
-                  {{ props.row.persona.email }}
-                </q-td>
-                <q-td key="birthDate" :props="props">
-                  {{ calcularEdad(props.row.persona.birthDate) }}
+                <q-td key="end_date" :props="props">
+                  {{ props.row.end_date }}
                 </q-td>
                 <q-td key="actions" :props="props">
                   <q-btn @click="modalAdd(true, props.row)" dense padding="none" color="indigo" flat icon="edit"></q-btn>
-                  <q-btn @click="deleteUser(props.row.persona.id)" dense padding="none" color="indigo" flat icon="delete"></q-btn>
+                  <q-btn @click="deleteLapse(props.row.id)" dense padding="none" color="indigo" flat icon="delete"></q-btn>
                 </q-td>
               </q-tr>
             </template>
@@ -80,7 +65,7 @@
       v-if="modalAddValue"
       :modalAddValue="modalAddValue"
       @modalAdd="modalAdd"
-      @getUsers="getUsers"
+      @getLapses="getLapses"
       :rowUpdate="rowUpdate" 
     ></modal-add>
   </q-page>
@@ -115,23 +100,10 @@ export default {
         // rowsNumber: xx if getting data from a server
       },
       columns: [
-        {
-          name: 'name',
-          required: true,
-          label: 'Nombres',
-          align: 'left',
-          field: row => row.persona.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        { name: 'surname', align: 'left', label: 'Apellidos', field: row => row.persona.surname, sortable: true },
-        { name: 'gender', align: 'left', label: 'Género', field: row => row.persona.gender, sortable: true },
-        { name: 'type', align: 'left', label: 'Tipo', field: row => internalRolMethod(row.type), sortable: true },
-        { name: 'document', align: 'left', label: 'Nro de cédula', field: row => row.persona.document, sortable: true },
-        { name: 'phone', align: 'left', label: 'Nro de teléfono', field: row => row.persona.phone, sortable: true },
-        { name: 'email', align: 'left', label: 'Correo', field: row => row.persona.email, sortable: true },
-        { name: 'birthDate', align: 'left', label: 'Edad', field: row => row.persona.birthDate, sortable: true },
-        { name: 'actions', align: 'left', label: 'Acciones'},
+        { name: 'name', align: 'left', label: 'Nombre', field: row => row.name, sortable: true },
+        { name: 'start_date', align: 'left', label: 'Fecha inicial', field: row => row.start_date, sortable: true },
+        { name: 'end_date', align: 'left', label: 'Fecha final', field: row => row.end_date, sortable: true },
+        { name: 'actions', align: 'left', label: 'Acciones'}
       ],
       modalAddValue: false
     }
@@ -140,8 +112,8 @@ export default {
     auth() {
       return this.$store.getters["auth/getUserData"];
     },
-    getAllUser() {
-      return this.$store.getters["auth/getAllUser"];
+    getAllLapses() {
+      return this.$store.getters["lapses/getAllLapses"];
     },
     internalRol(){
       switch (this.auth.type) {
@@ -162,13 +134,13 @@ export default {
     }
   },
   async created(){
-    await this.getUsers()
+    await this.getLapses()
   },
   methods: {
-    deleteUser(param) {
+    deleteLapse(param) {
       this.$q.dialog({
-        title: 'Eliminar usuario',
-        message: '¿Quiere eliminar este usuario?',
+        title: 'Eliminar lapso',
+        message: '¿Quiere eliminar este lapso?',
         cancel: true,
         persistent: false,
         className: 'dialog-bg-red text-white'
@@ -180,20 +152,20 @@ export default {
       })
     },
     deleteConfirm(param) {
-      this.$store.dispatch('auth/deletes', param)
+      this.$store.dispatch('lapses/deletes', param)
         .then((resp) => {
           Notify.create(
-            { message: 'Usuario eliminado.', 
+            { message: 'Lapso eliminado.', 
               type: 'positive', 
               position: 'top-right'
           })
-          this.getUsers()
+          this.getLapses()
         })
         .catch((err) => {
           console.log(err)
           Notify.create(
             { message: err.message, 
-              type: 'positive', 
+              type: 'negative', 
               position: 'top-right'
           })
         })
@@ -227,9 +199,9 @@ export default {
           break;
       }
     },
-    async getUsers(){
+    async getLapses(){
       try {
-        await this.$store.dispatch('auth/getAllUsers')
+        await this.$store.dispatch('lapses/getLapsesAll')
       } catch (error) {
           console.log(err)
           Notify.create(

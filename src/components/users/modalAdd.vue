@@ -3,7 +3,7 @@
     <q-dialog v-model="modalAddValue" full-width persistent>
         <q-card>
         <q-bar class="bg-indigo-1">
-          <span class="text-center">Registro de usuario</span>
+          <span class="text-center">{{ Object.entries(rowUpdate).length === 0 ? 'Registro de usuario' : 'Edición de usuario'  }} </span>
           <q-btn class="absolute-top-right" dense flat icon="close" @click="closeModal()">
             <q-tooltip content-class="bg-indigo">Cerrar</q-tooltip>
           </q-btn>
@@ -55,6 +55,7 @@
             </div>
             <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
               <q-input 
+                :disable="Object.entries(rowUpdate).length !== 0" 
                 :rules="[ val => val && val.length > 0 || 'Campo requerido']"
                 color="grey-3" 
                 dense 
@@ -85,6 +86,7 @@
             </div>
             <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
               <q-input 
+                :disable="Object.entries(rowUpdate).length !== 0"
                 type="email"
                 :rules="[val => !!val || 'Campo requerido', isValidEmail()]"
                 color="grey-3" 
@@ -119,7 +121,7 @@
                 color="grey-3" 
                 outlined
                 dense
-                disable
+                :disable="Object.entries(rowUpdate).length === 0"
                 label-color="indigo" 
                 v-model="user.status" 
                 :options="optionsStatus"
@@ -151,7 +153,7 @@
                 </template>
               </q-input>
             </div>
-            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
+            <div :style="Object.entries(rowUpdate).length !== 0 ? 'display:none;' : ''" class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
               <q-input 
                 :rules="[ val => val && val.length > 0 || 'Campo requerido']"
                 color="grey-3" 
@@ -168,7 +170,14 @@
             </div>
           </q-card-section>
           <q-card-actions align="right" class="q-ma-sm bg-white text-indigo">
-            <q-btn type="submit" padding="2px 22px 2px 22px" outline dense no-caps label="Agregar"/>
+            <q-btn 
+              type="submit" 
+              padding="2px 22px 2px 22px" 
+              outline 
+              dense 
+              no-caps 
+              :label="Object.entries(rowUpdate).length === 0 ? 'Agregar' : 'Editar'"
+              />
           </q-card-actions>
         </q-form>
       </q-card>
@@ -191,19 +200,16 @@ export default {
       type: Boolean,
       required: true
     },
+    rowUpdate: {
+      type: Object,
+      required: false
+    },
 
   },
   data(){
     return {
 
-      user: {
-        birthDate: formattedString,
-        status: {
-          label: 'Activo',
-          value: 'Activo'
-        },
-        password: '1234'
-      },
+      user: {},
       regEmail: "",
       optionsGender: [
         {
@@ -267,8 +273,60 @@ export default {
     }
   },
   async created(){
+    if(Object.entries(this.rowUpdate).length !== 0){
+      let status = {
+        label: this.rowUpdate.status,
+        value: this.rowUpdate.status
+      }
+      let gender = {
+        label: this.rowUpdate.persona.gender === 'M' ? 'Masculino' : 'Femenino',
+        value: this.rowUpdate.persona.gender
+      }
+      let type = {
+        label: this.internalRolMethod(this.rowUpdate.type),
+        value: this.rowUpdate.type
+      }
+      this.user = {
+        name: this.rowUpdate.persona.name,
+        surname: this.rowUpdate.persona.surname,
+        gender: gender,
+        document: this.rowUpdate.persona.document,
+        phone: this.rowUpdate.persona.phone,
+        email: this.rowUpdate.persona.email,
+        type: type,
+        status:  status,
+        birthDate: this.rowUpdate.persona.birthDate,
+        password: this.rowUpdate.password
+      }
+    }else{
+      this.user = {
+        birthDate: formattedString,
+        status: {
+          label: 'Activo',
+          value: 'Activo'
+        },
+        password: '1234'
+      }
+    }
   },
   methods: {
+    internalRolMethod(param){
+      switch (param) {
+        case "Teacher":
+          return "Docente"
+        break;
+        case "Student":
+          return "Estudiante"
+        break;
+        case "Admin":
+          return "Administrador"
+        break;
+      
+        default:
+          return "Usuario"
+          break;
+      }
+    },
     calcularEdad(fecha) {
         let hoy = new Date();
         let cumpleanos = new Date(fecha);
@@ -302,20 +360,24 @@ export default {
           phone: this.user.phone,
           email: this.user.email,
           type: this.user.type.value,
+          id: Object.entries(this.rowUpdate).length === 0 ? '' : this.rowUpdate.id,
+          id_person: Object.entries(this.rowUpdate).length === 0 ? '' : this.rowUpdate.persona.id
         }
-        await this.$store.dispatch('auth/registerUser', user)
-          Notify.create(
-            { message: "Usuario creado", 
+        //return false
+        let dispatchDir = Object.entries(this.rowUpdate).length === 0 ? 'auth/registerUser' : 'auth/editProfiles' 
+        await this.$store.dispatch(dispatchDir, user)
+        let message =  Object.entries(this.rowUpdate).length === 0 ? 'Usuario creado' : 'Usuario actualizado' 
+        Notify.create(
+            { message: message, 
               type: 'positive', 
               position: 'top-right'
           })
-          this.user = {}
           this.closeModal()
           this.$emit('getUsers')
       } catch (error) {
-          console.log(err)
+          console.log(error)
           Notify.create(
-            { message: err.message, 
+            { message: error.message, 
               type: 'negative', 
               position: 'top-right'
           })

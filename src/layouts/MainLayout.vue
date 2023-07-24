@@ -88,7 +88,7 @@
             </q-item-label>
           </q-item-section>
         </q-item>
-        <q-item
+       <!--  <q-item
           clickable
           tag="a"
           href="#"
@@ -102,11 +102,77 @@
           <q-item-section>
             <q-item-label>Inscribir</q-item-label>
             <q-item-label caption>
-             <!--  caption menú -->
             </q-item-label>
           </q-item-section>
-        </q-item>
-        <q-item
+        </q-item> -->
+        <q-expansion-item
+          expand-separator
+          icon="event_note"
+          label="Inscribir"
+        >
+          <q-card>
+            <q-card-section>
+              <q-item
+                  clickable
+                  tag="a"
+                  to="/inicio/materias"
+                >
+                  <q-item-section
+                    avatar
+                  >
+                <q-icon name="subject" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Materias</q-item-label>
+
+                <q-item-label caption>
+                  
+                </q-item-label>
+              </q-item-section>
+              </q-item>
+              <q-item
+                  clickable
+                  tag="a"
+                  to="/inicio/docentes"
+                >
+                <q-item-section
+                  avatar
+                >
+                <q-icon name="group" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Docentes</q-item-label>
+
+                <q-item-label caption>
+                  
+                </q-item-label>
+              </q-item-section>
+              </q-item>
+              <q-item
+                  clickable
+                  tag="a"
+                  href="#"
+                >
+                  <q-item-section
+                    avatar
+                  >
+                <q-icon name="groups" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Estudiantes</q-item-label>
+
+                <q-item-label caption>
+                  
+                </q-item-label>
+              </q-item-section>
+              </q-item>
+            </q-card-section>
+          </q-card>
+        </q-expansion-item>
+        <!-- <q-item
           clickable
           tag="a"
           href="#"
@@ -119,11 +185,79 @@
 
           <q-item-section>
             <q-item-label>Académico</q-item-label>
+
             <q-item-label caption>
-              <!-- caption menú -->
+              
             </q-item-label>
           </q-item-section>
-        </q-item>
+        </q-item> -->
+        <q-expansion-item
+          expand-separator
+          icon="school"
+          label="Académico"
+        >
+          <q-card>
+            <q-card-section>
+              <q-item
+                  clickable
+                  tag="a"
+                  to="/inicio/lapsos"
+                >
+                  <q-item-section
+                    avatar
+                  >
+                <q-icon name="date_range" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Lapsos</q-item-label>
+
+                <q-item-label caption>
+                  
+                </q-item-label>
+              </q-item-section>
+              </q-item>
+              <q-item
+                  clickable
+                  tag="a"
+                  to="/inicio/secciones"
+                >
+                <q-item-section
+                  avatar
+                >
+                <q-icon name="abc" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Secciones</q-item-label>
+
+                <q-item-label caption>
+                  
+                </q-item-label>
+              </q-item-section>
+              </q-item>
+              <q-item
+                  clickable
+                  tag="a"
+                  href="#"
+                >
+                  <q-item-section
+                    avatar
+                  >
+                <q-icon name="history_edu" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Grados</q-item-label>
+
+                <q-item-label caption>
+                  
+                </q-item-label>
+              </q-item-section>
+              </q-item>
+            </q-card-section>
+          </q-card>
+        </q-expansion-item>
         <q-item
           clickable
           tag="a"

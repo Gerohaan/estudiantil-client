@@ -14,7 +14,10 @@ const routes = [
     children: [
       { path: '/', component: () => import('pages/Inicio.vue'), meta: { requiresAuth: true } },
       { path: 'perfil', component: () => import('pages/Perfil.vue'), meta: { requiresAuth: true } },
-      { path: 'usuarios', component: () => import('pages/Usuarios.vue'), meta: { requiresAuth: true } }
+      { path: 'usuarios', component: () => import('pages/Usuarios.vue'), meta: { requiresAuth: true } },
+      { path: 'lapsos', component: () => import('pages/Lapsos.vue'), meta: { requiresAuth: true } },
+      { path: 'secciones', component: () => import('pages/Secciones.vue'), meta: { requiresAuth: true } },
+      { path: 'materias', component: () => import('pages/Materias.vue'), meta: { requiresAuth: true } }
     ]
   },
 

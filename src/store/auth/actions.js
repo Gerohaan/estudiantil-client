@@ -44,9 +44,9 @@ export function logout ({ commit }, data) {
 export function editProfiles ({ commit }, data) {
     return new Promise((resolve, reject) => {
         return editProfile(data, (response) => {
-        localStorage.removeItem('user')
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-        commit('setUser', response.data.user)
+        //localStorage.removeItem('user')
+        //localStorage.setItem('user', JSON.stringify(response.data.user))
+        //commit('setUser', response.data.user)
         resolve(response)
         }, (err) => {
         reject(err)

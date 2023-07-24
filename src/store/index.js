@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import auth from './auth'
+import lapses from './lapses'
+import sections from './sections'
+import subjects from './subjects'
 
 Vue.use(Vuex)
 
@@ -17,7 +20,10 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      auth
+      auth,
+      lapses,
+      sections,
+      subjects
     },
 
     // enable strict mode (adds overhead!)
