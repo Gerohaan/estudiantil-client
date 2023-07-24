@@ -153,7 +153,7 @@
               <q-item
                   clickable
                   tag="a"
-                  href="#"
+                  to="/inicio/estudiantes"
                 >
                   <q-item-section
                     avatar
@@ -239,7 +239,7 @@
               <q-item
                   clickable
                   tag="a"
-                  href="#"
+                  to="/inicio/grados"
                 >
                   <q-item-section
                     avatar

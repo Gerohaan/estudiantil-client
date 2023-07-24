@@ -5,6 +5,9 @@ import auth from './auth'
 import lapses from './lapses'
 import sections from './sections'
 import subjects from './subjects'
+import teachers from './teachers'
+import students from './students'
+import grades from './grades'
 
 Vue.use(Vuex)
 
@@ -23,7 +26,10 @@ export default function (/* { ssrContext } */) {
       auth,
       lapses,
       sections,
-      subjects
+      subjects,
+      teachers,
+      students,
+      grades
     },
 
     // enable strict mode (adds overhead!)

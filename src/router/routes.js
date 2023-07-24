@@ -17,7 +17,10 @@ const routes = [
       { path: 'usuarios', component: () => import('pages/Usuarios.vue'), meta: { requiresAuth: true } },
       { path: 'lapsos', component: () => import('pages/Lapsos.vue'), meta: { requiresAuth: true } },
       { path: 'secciones', component: () => import('pages/Secciones.vue'), meta: { requiresAuth: true } },
-      { path: 'materias', component: () => import('pages/Materias.vue'), meta: { requiresAuth: true } }
+      { path: 'materias', component: () => import('pages/Materias.vue'), meta: { requiresAuth: true } },
+      { path: 'docentes', component: () => import('pages/Docentes.vue'), meta: { requiresAuth: true } },
+      { path: 'estudiantes', component: () => import('pages/Estudiantes.vue'), meta: { requiresAuth: true } },
+      { path: 'grados', component: () => import('pages/Grados.vue'), meta: { requiresAuth: true } },
     ]
   },
 
