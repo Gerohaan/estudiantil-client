@@ -416,11 +416,13 @@ export default {
           this.closeModal()
           this.$emit('getUsers')
       } catch (error) {
-          console.log(error)
-          Notify.create(
-            { message: error.message, 
-              type: 'negative', 
-              position: 'top-right'
+          console.log(error.errors)
+          error.errors.map(item => {
+            Notify.create(
+              { message: item.msg, 
+                type: 'negative', 
+                position: 'top-right'
+            })
           })
       }
     }

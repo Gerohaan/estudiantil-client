@@ -5,6 +5,33 @@ import { domain } from './data'
 var url = domain
 
 
+export function register (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/add',  data: data, method: 'POST', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.errors)
+      }
+    })
+}
+
+export function edit (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/update/'+data.id, data: data, method: 'PUT', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.errors)
+      }
+    })
+}
 
 export function getAllGrades (callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''
@@ -35,3 +62,16 @@ export function showGrade (callBack, errorCallBack) {
     })
 }
 
+export function deleteGrade (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/delete/'+data, method: 'DELETE', headers: { Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.error)
+      }
+    })
+}

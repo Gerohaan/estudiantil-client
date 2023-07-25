@@ -40,38 +40,47 @@
             <template v-slot:body="props">
               <q-tr :props="props">
                 <q-td key="name" :props="props">
-                  {{ props.row.persona.name }}
+                  {{ props.row.name }}
                 </q-td>
-                <q-td key="surname" :props="props">
-                  {{ props.row.persona.surname }}
+                <q-td key="section" :props="props">
+                  {{ props.row.section.name }}
                 </q-td>
-                <q-td key="gender" :props="props">
-                  {{ props.row.persona.gender }}
+                <q-td key="teacher" :props="props">
+                  {{ props.row.teacher.profession +" "+props.row.teacher.persona.name+" "+props.row.teacher.persona.surname }}
                 </q-td>
-                <q-td key="document" :props="props">
-                  {{ props.row.persona.document }}
+                <q-td key="turn" :props="props">
+                  {{ props.row.turn }}
                 </q-td>
-                <q-td key="phone" :props="props">
-                  {{ props.row.persona.phone }}
+                <q-td key="amount_in_tuition" :props="props">
+                  {{ props.row.amount_in_tuition }}
                 </q-td>
-                <q-td key="email" :props="props">
-                  {{ props.row.persona.email }}
+                <q-td key="limit" :props="props">
+                  {{ props.row.limit }}
                 </q-td>
-                <q-td key="representative" :props="props">
-                  {{ props.row.representative }}
-                </q-td>
-                <q-td key="birthDate" :props="props">
-                  {{ calcularEdad(props.row.persona.birthDate) }}
+                <q-td key="status" :props="props">
+                  {{ props.row.status }}
                 </q-td>
                 <q-td key="actions" :props="props">
-                  <q-btn @click="modalAdd(true, props.row)" dense padding="none" color="indigo" flat icon="person_search"></q-btn>
+                  <q-btn @click="details(true, props.row)" dense padding="none" color="indigo" flat icon="person_search"></q-btn>
+                  <q-btn @click="modalAdd(true, props.row)" dense padding="none" color="indigo" flat icon="edit"></q-btn>
+                  <q-btn @click="removeGrade(props.row.id)" dense padding="none" color="indigo" flat icon="delete"></q-btn>
                 </q-td>
               </q-tr>
             </template>
           </q-table>
         </div>
       </div>
+      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <q-btn fab icon="add" color="indigo" @click="modalAdd(true)"/>
+      </q-page-sticky>
     </section>
+    <modal-add
+      v-if="modalAddValue"
+      :modalAddValue="modalAddValue"
+      @modalAdd="modalAdd"
+      @getGrades="getGrades"
+      :rowUpdate="rowUpdate" 
+    ></modal-add>
   </q-page>
 </template>
 
@@ -95,6 +104,7 @@ export default {
   data(){
     return {
       filter: '',
+      rowUpdate: {},
       initialPagination: {
         sortBy: 'desc',
         descending: false,
@@ -106,19 +116,20 @@ export default {
         {
           name: 'name',
           required: true,
-          label: 'Nombres',
+          label: 'Grado',
           align: 'left',
-          field: row => row.persona.name,
+          field: row => row.name,
           format: val => `${val}`,
           sortable: true
         },
-        { name: 'surname', align: 'left', label: 'Apellidos', field: row => row.persona.surname, sortable: true },
-        { name: 'gender', align: 'left', label: 'Género', field: row => row.persona.gender, sortable: true },
-        { name: 'document', align: 'left', label: 'Nro de cédula', field: row => row.persona.document, sortable: true },
-        { name: 'phone', align: 'left', label: 'Nro de teléfono', field: row => row.persona.phone, sortable: true },
-        { name: 'email', align: 'left', label: 'Correo', field: row => row.persona.email, sortable: true },
-        { name: 'representative', align: 'left', label: 'Representante', field: row => row.representative, sortable: true },
-        { name: 'birthDate', align: 'left', label: 'Edad', field: row => row.persona.birthDate, sortable: true },
+        { name: 'section', align: 'left', label: 'Sección', field: row => row.section.name, sortable: true },
+        { name: 'teacher', align: 'left', label: 'Docente', field: row => {
+          return row.teacher.profession +" "+row.teacher.persona.name+" "+row.teacher.persona.surname
+        }, sortable: true },
+        { name: 'turn', align: 'left', label: 'Turno', field: row => row.turn, sortable: true },
+        { name: 'amount_in_tuition', align: 'left', label: 'Cantidad en matrícula', field: row => row.amount_in_tuition, sortable: true },
+        { name: 'limit', align: 'left', label: 'Limite', field: row => row.limit, sortable: true },
+        { name: 'status', align: 'left', label: 'Estatus', field: row => row.status, sortable: true },
         { name: 'actions', align: 'left', label: 'Acciones'},
       ],
       modalAddValue: false
@@ -181,6 +192,39 @@ export default {
           return "Usuario"
           break;
       }
+    },
+    removeGrade(param) {
+      this.$q.dialog({
+        title: 'Eliminar grado',
+        message: '¿Quiere eliminar este grado?',
+        cancel: true,
+        persistent: false,
+        className: 'dialog-bg-red text-white'
+      }).onOk(() => {
+      }).onOk(() => {
+        this.deleteConfirm(param)
+      }).onCancel(() => {
+      }).onDismiss(() => {
+      })
+    },
+    deleteConfirm(param) {
+      this.$store.dispatch('grades/deletes', param)
+        .then((resp) => {
+          Notify.create(
+            { message: 'Grado eliminado.', 
+              type: 'positive', 
+              position: 'top-right'
+          })
+          this.getGrades()
+        })
+        .catch((err) => {
+          console.log(err)
+          Notify.create(
+            { message: err.message, 
+              type: 'positive', 
+              position: 'top-right'
+          })
+        })
     },
     async getGrades(){
       try {

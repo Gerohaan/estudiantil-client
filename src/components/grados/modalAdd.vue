@@ -3,7 +3,7 @@
     <q-dialog v-model="modalAddValue" full-width persistent>
         <q-card>
         <q-bar class="bg-indigo-1">
-          <span class="text-center">{{ Object.entries(rowUpdate).length === 0 ? 'Registro de usuario' : 'Edición de usuario'  }} </span>
+          <span class="text-center">{{ Object.entries(rowUpdate).length === 0 ? 'Registro de grado' : 'Edición de grado'  }} </span>
           <q-btn class="absolute-top-right" dense flat icon="close" @click="closeModal()">
             <q-tooltip content-class="bg-indigo">Cerrar</q-tooltip>
           </q-btn>
@@ -17,22 +17,8 @@
                 label-color="indigo" 
                 outlined 
                 dense
-                v-model="user.name" 
-                label="Nombres *">
-                <template v-slot:append>
-                  <q-icon name="badge" color="indigo" />
-                </template>
-              </q-input>
-            </div>
-            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-input 
-                :rules="[ val => val && val.length > 0 || 'Campo requerido']"
-                color="grey-3"  
-                label-color="indigo" 
-                outlined 
-                dense
-                v-model="user.surname" 
-                label="Apellidos *">
+                v-model="grade.name" 
+                label="Nombre *">
                 <template v-slot:append>
                   <q-icon name="badge" color="indigo" />
                 </template>
@@ -45,74 +31,15 @@
                 outlined
                 dense
                 label-color="indigo" 
-                v-model="user.gender" 
-                :options="optionsGender"
-                label="Género *">
+                v-model="grade.id_section" 
+                :options="optionsSection"
+                option-value="id"
+                option-label="name"
+                emit-value
+                map-options
+                label="Sección *">
                 <template v-slot:append>
-                  <q-icon name="transgender" color="indigo" />
-                </template>
-              </q-select>
-            </div>
-            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-input 
-                :disable="Object.entries(rowUpdate).length !== 0" 
-                :rules="[ val => val && val.length > 0 || 'Campo requerido']"
-                color="grey-3" 
-                dense 
-                label-color="indigo" 
-                outlined 
-                v-model="user.document" 
-                mask="########"
-                label="Nro de cédula *">
-                <template v-slot:append>
-                  <q-icon name="assignment_ind" color="indigo" />
-                </template>
-              </q-input>
-            </div>
-            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-input 
-                :rules="[ val => val && val.length > 0 || 'Campo requerido']"
-                color="grey-3" 
-                dense 
-                label-color="indigo" 
-                outlined 
-                v-model="user.phone" 
-                mask="(####) ### - ####"
-                label="Nro de teléfono *">
-                <template v-slot:append>
-                  <q-icon name="contact_phone" color="indigo" />
-                </template>
-              </q-input>
-            </div>
-            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-input 
-                :disable="Object.entries(rowUpdate).length !== 0"
-                type="email"
-                :rules="[val => !!val || 'Campo requerido', isValidEmail()]"
-                color="grey-3" 
-                dense 
-                label-color="indigo" 
-                outlined 
-                v-model="user.email" 
-                label="Correo *">
-                <template v-slot:append>
-                  <q-icon name="alternate_email" color="indigo" />
-                </template>
-              </q-input>
-            </div>
-            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-select 
-                :rules="[ val => val || 'Campo requerido']"
-                color="grey-3" 
-                outlined
-                dense
-                :disable="Object.entries(rowUpdate).length !== 0"
-                label-color="indigo" 
-                v-model="user.type" 
-                :options="optionsType"
-                label="Tipo *">
-                <template v-slot:append>
-                  <q-icon name="settings_accessibility" color="indigo" />
+                  <q-icon name="abc" color="indigo" />
                 </template>
               </q-select>
             </div>
@@ -122,80 +49,78 @@
                 color="grey-3" 
                 outlined
                 dense
-                :disable="Object.entries(rowUpdate).length === 0"
                 label-color="indigo" 
-                v-model="user.status" 
+                v-model="grade.id_teacher" 
+                :options="optionsTeacher"
+                option-value="id"
+                option-label="name"
+                emit-value
+                map-options
+                label="Docente *">
+                <template v-slot:append>
+                  <q-icon name="group" color="indigo" />
+                </template>
+              </q-select>
+            </div>
+            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
+              <q-select 
+                :rules="[ val => val || 'Campo requerido']"
+                color="grey-3" 
+                outlined
+                dense
+                label-color="indigo" 
+                v-model="grade.turn" 
+                :options="optionsTurn"
+                label="Turno *">
+                <template v-slot:append>
+                  <q-icon name="assignment_turned_in" color="indigo" />
+                </template>
+              </q-select>
+            </div>
+            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
+              <q-input 
+                :rules="[ val => val && val.length > 0 || 'Campo requerido']"
+                color="grey-3" 
+                dense 
+                label-color="indigo" 
+                outlined 
+                v-model="grade.amount_in_tuition" 
+                mask="##"
+                label="Cantidad en matrícula *">
+                <template v-slot:append>
+                  <q-icon name="looks_one" color="indigo" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
+              <q-input 
+                :rules="[ val => val && val.length > 0 || 'Campo requerido']"
+                color="grey-3" 
+                dense 
+                label-color="indigo" 
+                outlined 
+                v-model="grade.limit" 
+                mask="##"
+                label="Limite *">
+                <template v-slot:append>
+                  <q-icon name="looks_one" color="indigo" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
+              <q-select 
+                :rules="[ val => val || 'Campo requerido']"
+                color="grey-3" 
+                outlined
+                dense
+                label-color="indigo" 
+                v-model="grade.status" 
                 :options="optionsStatus"
-                label="Status *">
+                label="Estatus *">
                 <template v-slot:append>
-                  <q-icon name="recent_actors" color="indigo" />
+                  <q-icon name="military_tech" color="indigo" />
                 </template>
               </q-select>
-            </div>
-            <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-input 
-                :rules="[ val => val && calcularEdad(val) >= acceptedAge || 'Fecha de nacimiento no permitida']"
-                color="grey-3" 
-                dense 
-                label-color="indigo" 
-                outlined 
-                v-model="user.birthDate" 
-                label="Fecha de nacimiento *">
-                <template v-slot:append>
-                  <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                      <q-date v-model="user.birthDate">
-                        <div class="row items-center justify-end">
-                          <q-btn v-close-popup label="Cerrar" color="primary" flat />
-                        </div>
-                      </q-date>
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
-            </div>
-            <div :style="Object.entries(rowUpdate).length !== 0 ? 'display:none;' : ''" v-if="user.type && user.type.value === 'Teacher'" class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-input 
-                :rules="[ val => val && val.length > 0 || 'Campo requerido']"
-                color="grey-3" 
-                dense 
-                label-color="indigo" 
-                outlined
-                v-model="user.profession" 
-                label="Profesión *">
-                <template v-slot:append>
-                  <q-icon name="person" color="indigo" />
-                </template>
-              </q-input>
-            </div>
-            <div :style="Object.entries(rowUpdate).length !== 0 ? 'display:none;' : ''" v-if="user.type && user.type.value === 'Student'" class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-input 
-                :rules="[ val => val && val.length > 0 || 'Campo requerido']"
-                color="grey-3" 
-                dense 
-                label-color="indigo" 
-                outlined
-                v-model="user.representative" 
-                label="Representante *">
-                <template v-slot:append>
-                  <q-icon name="person" color="indigo" />
-                </template>
-              </q-input>
-            </div>
-            <div :style="Object.entries(rowUpdate).length !== 0 ? 'display:none;' : ''" class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
-              <q-input 
-                :rules="[ val => val && val.length > 0 || 'Campo requerido']"
-                color="grey-3" 
-                dense 
-                label-color="indigo" 
-                outlined 
-                disable
-                v-model="user.password" 
-                label="Contraseña *">
-                <template v-slot:append>
-                  <q-icon name="password" color="indigo" />
-                </template>
-              </q-input>
             </div>
           </q-card-section>
           <q-card-actions align="right" class="q-ma-sm bg-white text-indigo">
@@ -237,16 +162,16 @@ export default {
   },
   data(){
     return {
-      user: {},
+      grade: {},
       regEmail: "",
-      optionsGender: [
+      optionsTurn: [
         {
-          label: 'Masculino',
-          value: 'M' 
+          label: 'Mañana',
+          value: 'mañana' 
         },
         {
-          label: 'Femenino',
-          value: 'F' 
+          label: 'Tarde',
+          value: 'Tarde' 
         }
       ],
       optionsStatus: [
@@ -277,19 +202,31 @@ export default {
   },
   computed:{
     acceptedAge(){
-      if(this.user.type && this.user.type.value === 'Student'){
+      if(this.grade.type && this.grade.type.value === 'Student'){
         return 5
-      }else if(this.user.type && this.user.type.value === 'Teacher'){
+      }else if(this.grade.type && this.grade.type.value === 'Teacher'){
         return 18
       }else{
         return 18
       }
     },
     auth() {
-      return this.$store.getters["auth/getUserData"];
+      return this.$store.getters["auth/getgradeData"];
     },
-    getAllUser() {
-      return this.$store.getters["auth/getAllUser"];
+    getAllgrade() {
+      return this.$store.getters["auth/getAllgrade"];
+    },
+    optionsSection() {
+      return this.$store.getters["sections/getAllS"]
+    },
+    optionsTeacher() {
+      let teacher = this.$store.getters["teachers/getAllT"].map(item => {
+        return {
+          id: item.id,
+          name: item.persona.name +' '+item.persona.surname
+        }
+      })
+      return teacher
     },
     internalRol(){
       switch (this.auth.type) {
@@ -310,41 +247,32 @@ export default {
     }
   },
   async created(){
+    await this.getSections()
+    await this.getTeachers()
     if(Object.entries(this.rowUpdate).length !== 0){
       let status = {
         label: this.rowUpdate.status,
         value: this.rowUpdate.status
       }
-      let gender = {
-        label: this.rowUpdate.persona.gender === 'M' ? 'Masculino' : 'Femenino',
-        value: this.rowUpdate.persona.gender
+      let turn = {
+          label: this.rowUpdate.turn,
+          value: this.rowUpdate.turn
       }
-      let type = {
-        label: this.internalRolMethod(this.rowUpdate.type),
-        value: this.rowUpdate.type
-      }
-      this.user = {
-        name: this.rowUpdate.persona.name,
-        surname: this.rowUpdate.persona.surname,
-        gender: gender,
-        document: this.rowUpdate.persona.document,
-        phone: this.rowUpdate.persona.phone,
-        email: this.rowUpdate.persona.email,
-        type: type,
-        status:  status,
-        birthDate: this.rowUpdate.persona.birthDate,
-        password: this.rowUpdate.password,
-        profession: '-',
-        representative: '-',
+      this.grade = {
+        name: this.rowUpdate.name,
+        id_section: this.rowUpdate.id_section,
+        id_teacher: this.rowUpdate.id_teacher,
+        turn: turn,
+        amount_in_tuition: this.rowUpdate.amount_in_tuition,
+        limit: this.rowUpdate.limit.toString(),
+        status:  status
       }
     }else{
-      this.user = {
-        birthDate: formattedString,
+      this.grade = {
         status: {
           label: 'Activo',
           value: 'Activo'
-        },
-        password: '1234'
+        }
       }
     }
   },
@@ -383,43 +311,62 @@ export default {
       return emailPattern.test(this.regEmail) || 'Correo inválido';
     },
     closeModal(){
-      this.user = {}
+      this.grade = {}
       this.$emit('modalAdd', false)
     },
     async onSubmit(){
       try {
-        let user = {
-          birthDate: this.user.birthDate,
-          status: this.user.status.value,
-          password: this.user.password,
-          name: this.user.name,
-          surname: this.user.surname,
-          gender: this.user.gender.value,
-          document: this.user.document,
-          phone: this.user.phone,
-          email: this.user.email,
-          type: this.user.type.value,
-          profession: this.user.profession,
-          representative: this.user.representative,
-          id: Object.entries(this.rowUpdate).length === 0 ? '' : this.rowUpdate.id,
-          id_person: Object.entries(this.rowUpdate).length === 0 ? '' : this.rowUpdate.persona.id
+        let grade = {
+          name: this.grade.name,
+          id_section: this.grade.id_section,
+          id_teacher: this.grade.id_teacher,
+          turn: this.grade.turn.value,
+          amount_in_tuition: parseFloat(this.grade.amount_in_tuition),
+          limit: parseFloat(this.grade.limit),
+          status: this.grade.status.value,
+          id: Object.entries(this.rowUpdate).length === 0 ? '' : this.rowUpdate.id
         }
         //return false
-        let dispatchDir = Object.entries(this.rowUpdate).length === 0 ? 'auth/registerUser' : 'auth/editProfiles' 
-        await this.$store.dispatch(dispatchDir, user)
-        let message =  Object.entries(this.rowUpdate).length === 0 ? 'Usuario creado' : 'Usuario actualizado' 
+        let dispatchDir = Object.entries(this.rowUpdate).length === 0 ? 'grades/registerGrade' : 'grades/editGrade' 
+        await this.$store.dispatch(dispatchDir, grade)
+        let message =  Object.entries(this.rowUpdate).length === 0 ? 'Grado creado' : 'Usuario Grado' 
         Notify.create(
             { message: message, 
               type: 'positive', 
               position: 'top-right'
           })
           this.closeModal()
-          this.$emit('getUsers')
+          this.$emit('getGrades')
       } catch (error) {
-          console.log(error)
+          error.map(item => {
+            Notify.create(
+              { message: item.msg, 
+                type: 'negative', 
+                position: 'top-right'
+            })
+          })
+      }
+    },
+    async getTeachers(){
+      try {
+        await this.$store.dispatch('teachers/allTeachers')
+      } catch (error) {
+          console.log(err)
           Notify.create(
-            { message: error.message, 
-              type: 'negative', 
+            { message: err.message, 
+              type: 'positive', 
+              position: 'top-right'
+          })
+      }
+    },
+    async getSections(){
+      try {
+        await this.$store.dispatch('sections/getSectionsAll')
+      } catch (error) {
+          console.log(err)
+          Notify.create(
+            { message: err.message, 
+              type: 'positive', 
               position: 'top-right'
           })
       }
