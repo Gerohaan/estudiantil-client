@@ -1,4 +1,4 @@
-import { register, edit, getAllSubjects, deleteSubject, showLapse } from 'src/api/subjects'
+import { register, edit, getAllSubjects, deleteSubject, storeSubjectAsigned, showLapse } from 'src/api/subjects'
 
 export function registerS ({ commit }, lapse) {
   return new Promise((resolve, reject) => {
@@ -39,6 +39,8 @@ export function getSubjectAll ({ commit }) {
     })
   })
 }
+
+
 
 export function deletes ({ commit }, data) {
   return new Promise((resolve, reject) => {

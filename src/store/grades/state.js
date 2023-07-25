@@ -4,6 +4,8 @@ export default function () {
     newsletters: [],
     allGrades: [],
     filterGrade: {},
-    notifications: []
+    notifications: [],
+    gradeStudent: [],
+    allSubjectGrades: []
   }
 }

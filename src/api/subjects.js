@@ -18,6 +18,19 @@ export function register (data, callBack, errorCallBack) {
     })
 }
 
+export function storeSubjectAsigned (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/subject/add', data: data, method: 'POST', headers: { 'Accept': 'application/json;charset=utf-8', Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (err) {
+        errorCallBack(err.response.data)
+      }
+    })
+}
 
 export function edit (data, callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''

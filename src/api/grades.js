@@ -47,6 +47,61 @@ export function getAllGrades (callBack, errorCallBack) {
     })
 }
 
+export function getGradeStudent (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/show/student/'+data, method: 'GET', headers: { Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.error)
+      }
+    })
+}
+
+export function storeSubjectAsigned (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/add/subjectGrade/', data: data, method: 'POST', headers: { Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.error)
+      }
+    })
+}
+
+export function getGradeStudentAsigned (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/add/studentGrade/', data: data, method: 'POST', headers: { Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.error)
+      }
+    })
+}
+
+export function getAllSubjectGrades (callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/showSubjectGrades', method: 'GET', headers: { Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.error)
+      }
+    })
+}
 
 export function showGrade (callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''

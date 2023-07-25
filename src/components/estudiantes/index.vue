@@ -64,7 +64,7 @@
                   {{ calcularEdad(props.row.persona.birthDate) }}
                 </q-td>
                 <q-td key="actions" :props="props">
-                  <q-btn @click="modalAdd(true, props.row)" dense padding="none" color="indigo" flat icon="person_search"></q-btn>
+                  <q-btn @click="modalDetail(true, props.row)" dense padding="none" color="indigo" flat icon="person_search"></q-btn>
                 </q-td>
               </q-tr>
             </template>
@@ -72,18 +72,24 @@
         </div>
       </div>
     </section>
+    <detail
+      v-if="modalDetailValue"
+      :modalDetailValue="modalDetailValue"
+      :rowData="rowData"
+      @modalDetail="modalDetail" 
+    ></detail>
   </q-page>
 </template>
 
 <script>
 import { Dialog } from 'quasar'
 import { Notify } from 'quasar'
-import modalAdd from './modalAdd.vue'
+import detail from './detail.vue'
 
 export default {
   name: 'index',
   components: {
-    modalAdd
+    detail
   },
   props: {
     /* title: {
@@ -94,6 +100,7 @@ export default {
   },
   data(){
     return {
+      rowData: {},
       filter: '',
       initialPagination: {
         sortBy: 'desc',
@@ -119,9 +126,9 @@ export default {
         { name: 'email', align: 'left', label: 'Correo', field: row => row.persona.email, sortable: true },
         { name: 'representative', align: 'left', label: 'Representante', field: row => row.representative, sortable: true },
         { name: 'birthDate', align: 'left', label: 'Edad', field: row => row.persona.birthDate, sortable: true },
-        { name: 'actions', align: 'left', label: 'Acciones'},
+        { name: 'actions', align: 'left', label: 'Ver'},
       ],
-      modalAddValue: false
+      modalDetailValue: false
     }
   },
   computed:{
@@ -194,14 +201,9 @@ export default {
           })
       }
     },
-    modalAdd(param, param2){
-      if(param2 !== undefined){
-        this.rowUpdate = param2
-      }
-      this.modalAddValue = param 
-      if(param === false){
-        this.rowUpdate = {}
-      }
+    modalDetail(param, param2){
+      this.modalDetailValue = param 
+      this.rowData = param2 ? param2 : {} 
     }
   }
 }

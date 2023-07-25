@@ -61,7 +61,7 @@
                   {{ props.row.status }}
                 </q-td>
                 <q-td key="actions" :props="props">
-                  <q-btn @click="details(true, props.row)" dense padding="none" color="indigo" flat icon="person_search"></q-btn>
+                  <q-btn @click="modalDetail(true, props.row)" dense padding="none" color="indigo" flat icon="person_search"></q-btn>
                   <q-btn @click="modalAdd(true, props.row)" dense padding="none" color="indigo" flat icon="edit"></q-btn>
                   <q-btn @click="removeGrade(props.row.id)" dense padding="none" color="indigo" flat icon="delete"></q-btn>
                 </q-td>
@@ -81,6 +81,13 @@
       @getGrades="getGrades"
       :rowUpdate="rowUpdate" 
     ></modal-add>
+    <detail
+      v-if="detailValue"
+      :detailValue="detailValue"
+      @modalDetail="modalDetail"
+      @getGrades="getGrades"
+      :rowUpdate="rowUpdate" 
+    ></detail>
   </q-page>
 </template>
 
@@ -88,11 +95,13 @@
 import { Dialog } from 'quasar'
 import { Notify } from 'quasar'
 import modalAdd from './modalAdd.vue'
+import detail from './detail.vue'
 
 export default {
   name: 'index',
   components: {
-    modalAdd
+    modalAdd,
+    detail
   },
   props: {
     /* title: {
@@ -103,6 +112,7 @@ export default {
   },
   data(){
     return {
+      detailValue: false,
       filter: '',
       rowUpdate: {},
       initialPagination: {
@@ -236,6 +246,15 @@ export default {
               type: 'positive', 
               position: 'top-right'
           })
+      }
+    },
+    modalDetail(param, param2){
+      if(param2 !== undefined){
+        this.rowUpdate = param2
+      }
+      this.detailValue = param 
+      if(param === false){
+        this.rowUpdate = {}
       }
     },
     modalAdd(param, param2){

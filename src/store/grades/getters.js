@@ -8,6 +8,14 @@ export function getAllGrades (state) {
     return state.allGrades
 }
 
+export function getGradeStudent (state) {
+    return state.gradeStudent
+}
+
+export function getAllSubjectGrades (state) {
+    return state.allSubjectGrades
+}
+
 export function filterGrade (state) {
     return state.filterGrade
 }

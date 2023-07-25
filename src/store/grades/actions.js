@@ -1,4 +1,4 @@
-import { getAllGrades, showGrade, register, edit, deleteGrade } from 'src/api/grades'
+import { getAllSubjectGrades, getGradeSubjectAll, storeSubjectAsigned, getAllGrades, showGrade, register, edit, deleteGrade, getGradeStudent, getGradeStudentAsigned } from 'src/api/grades'
 
 export function registerGrade ({ commit }, data) {
   return new Promise((resolve, reject) => {
@@ -32,6 +32,17 @@ export function deletes ({ commit }, data) {
   })
 }
 
+export function getSubjectGrades ({ commit }) {
+  return new Promise((resolve, reject) => {
+    return getAllSubjectGrades((response) => {
+      commit('setAllSubjectGrades', response.data)
+      resolve(response)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}
+
 export function allGrades ({ commit }) {
   return new Promise((resolve, reject) => {
     return getAllGrades((response) => {
@@ -43,6 +54,50 @@ export function allGrades ({ commit }) {
   })
 }
 
+export function gradeStudent ({ commit }, data) {
+  return new Promise((resolve, reject) => {
+    return getGradeStudent(data, (response) => {
+      commit('setGradeStudent', response.data)
+      resolve(response)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}
+
+export function gradeStudentAsigned ({ commit }, data) {
+  return new Promise((resolve, reject) => {
+    return getGradeStudentAsigned(data, (response) => {
+      commit('setGradeStudent', response.data)
+      resolve(response)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}
+
+export function gradeSubjectAll ({ commit }) {
+  return new Promise((resolve, reject) => {
+    return getGradeSubjectAll((response) => {
+      //commit('setAllS', response.data)
+      resolve(response)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}
+
+
+export function gradeSubjectAsigned ({ commit }, data) {
+  return new Promise((resolve, reject) => {
+    return storeSubjectAsigned(data, (response) => {
+      //commit('setAllS', response.data)
+      resolve(response)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}
 
 export function show ({ commit }) {
   return new Promise((resolve, reject) => {
