@@ -4,7 +4,6 @@ import { domain } from './data'
 
 var url = domain
 
-
 export function register (data, callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''
   const newToken = token.replace('"', ' ')
@@ -70,7 +69,7 @@ export function storeSubjectAsigned (data, callBack, errorCallBack) {
     })
     .catch(err => {
       if (errorCallBack != null) {
-        errorCallBack(err.response.data.error)
+        errorCallBack(err.response.data.errors)
       }
     })
 }
@@ -79,6 +78,21 @@ export function getGradeStudentAsigned (data, callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''
   const newToken = token.replace('"', ' ')
   axios({ url: url + '/grades/add/studentGrade/', data: data, method: 'POST', headers: { Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.errors)
+      }
+    })
+}
+
+
+export function getAllStudentsGrades (callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/showStudentsGrades', method: 'GET', headers: { Authorization: 'Bearer ' + newToken } })
     .then(response => {
       callBack(response)
     })
@@ -121,6 +135,34 @@ export function deleteGrade (data, callBack, errorCallBack) {
   var token = localStorage.getItem('token') || ''
   const newToken = token.replace('"', ' ')
   axios({ url: url + '/grades/delete/'+data, method: 'DELETE', headers: { Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.error)
+      }
+    })
+}
+
+export function deleteStudentGradeApi (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/deleteStudent/'+data, method: 'DELETE', headers: { Authorization: 'Bearer ' + newToken } })
+    .then(response => {
+      callBack(response)
+    })
+    .catch(err => {
+      if (errorCallBack != null) {
+        errorCallBack(err.response.data.error)
+      }
+    })
+}
+
+export function deleteSubjectGradeApi (data, callBack, errorCallBack) {
+  var token = localStorage.getItem('token') || ''
+  const newToken = token.replace('"', ' ')
+  axios({ url: url + '/grades/deleteSubject/'+data, method: 'DELETE', headers: { Authorization: 'Bearer ' + newToken } })
     .then(response => {
       callBack(response)
     })

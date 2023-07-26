@@ -6,6 +6,7 @@ export default function () {
     filterGrade: {},
     notifications: [],
     gradeStudent: [],
-    allSubjectGrades: []
+    allSubjectGrades: [],
+    allStudentsGrades: []
   }
 }

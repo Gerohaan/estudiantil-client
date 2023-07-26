@@ -1,15 +1,15 @@
 <template>
   <q-page>
-    <q-dialog v-model="detailValue"  
+    <q-dialog v-model="notasValue"  
     :maximized="maximizedToggle"
     transition-show="slide-up"
     transition-hide="slide-down"
     persistent>
       <q-card>
         <q-bar class="bg-indigo-1">
-          <span class="text-center">Información del Grado</span>
+          <span class="text-center">Notas del grado</span>
           <q-space></q-space>
-          <q-btn class="absolute-top-right" dense flat icon="close" @click="$emit('modalDetail', false)">
+          <q-btn class="absolute-top-right" dense flat icon="close" @click="$emit('modalNotas', false)">
             <q-tooltip content-class="bg-indigo">Cerrar</q-tooltip>
           </q-btn>
         </q-bar>
@@ -80,53 +80,9 @@
             </q-field>
           </div>
         </q-card-section>
-       
-          <div class="row q-pl-md q-pr-md"> 
-            <div class="col-6 q-pa-sm text-indigo text-bold">
-            <q-icon name="add" size="sm" color="indigo" /> Agregar Materias
-            <q-select 
-                :rules="[ val => val || 'Campo requerido']"
-                color="grey-3" 
-                outlined
-                dense
-                label-color="indigo" 
-                v-model="id_subject" 
-                :options="getSubjectAll"
-                emit-value
-                option-label="name"
-                option-value="id"
-                map-options
-                @input="asignedMateria(id_subject, rowUpdate.id)"
-                label="Asignar grado *">
-                <template v-slot:append>
-                  <q-icon name="grade" color="indigo" />
-                </template>
-            </q-select>
-            </div>
-            <div class="col-6 q-pa-sm text-indigo text-bold">
-              <q-icon name="add" size="sm" color="indigo" /> Agregar Estudiantes
-              <q-select 
-                  :rules="[ val => val || 'Campo requerido']"
-                  color="grey-3" 
-                  outlined
-                  dense
-                  label-color="indigo" 
-                  v-model="id_student" 
-                  :options="getStudentAll"
-                  emit-value
-                  option-label="name"
-                  option-value="id"
-                  map-options
-                  @input="asignedEstudiante(id_student, rowUpdate.id)"
-                  label="Asignar estudiante *">
-                  <template v-slot:append>
-                    <q-icon name="grade" color="indigo" />
-                  </template>
-              </q-select>
-            </div>
-          </div>
+
           <div class="row q-pl-md q-pr-md">
-            <q-scroll-area class="col" style="height: 700px; max-width: 50%;">
+          <!-- <q-scroll-area class="col" style="height: 700px; max-width: 50%;">
             <q-markup-table class="q-ma-sm">
               <thead>
                 <tr>
@@ -152,21 +108,21 @@
                 </tr>
               </tbody>
             </q-markup-table>
-          </q-scroll-area>
-          <q-scroll-area class="col" style="height: 700px; max-width: 50%;">
+          </q-scroll-area> -->
+          <q-scroll-area class="col" style="height: 700px; max-width: 100%;">
             <q-markup-table class="q-ma-sm">
               <thead>
                 <tr>
                   <th colspan="5">
                     <div class="row no-wrap items-center">
-                      <div class="text-h6">Estudiantes</div>
+                      <div class="text-h6">Relación de notas</div>
                     </div>
                   </th>
                 </tr>
                 <tr>
                   <th class="text-left">Nombres</th>
                   <th class="text-left">Apellidos</th>
-                  <th class="text-right">Representante</th>
+                  <th class="text-right">Lapso</th>
                   <th class="text-right">Acciones</th>
                 </tr>
               </thead>
@@ -174,7 +130,21 @@
                 <tr v-for="(student, index) in infoStudentGrade" :key="index">
                   <td class="text-left">{{ student.student.persona.name }}</td>
                   <td class="text-left">{{ student.student.persona.surname }}</td>
-                  <td class="text-right">{{ student.student.representative }}</td>
+                  <td class="text-right">
+                  <q-select 
+                        :rules="[ val => val || 'Campo requerido']"
+                        color="grey-3" 
+                        outlined
+                        dense
+                        label-color="indigo" 
+                        v-model="grade" 
+                        :options="getAllLapses"
+                        label="lapso *">
+                        <template v-slot:append>
+                          <q-icon name="assignment_turned_in" color="indigo" />
+                        </template>
+                      </q-select>
+                  </td>
                   <td class="text-right">
                     <q-btn @click="removeStudent(student.id)" icon="delete" size="sm" color="indigo" padding="none" rounded dense flat></q-btn>
                   </td>
@@ -199,7 +169,7 @@ const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')
 export default {
   name: 'add',
   props: {
-    detailValue: {
+    notasValue: {
       type: Boolean,
       required: true
     },
@@ -216,7 +186,8 @@ export default {
       id_student: null,
       infoSubjectGrade: null,
       infoStudentGrade: null,
-      user: {},  
+      user: {}, 
+      relationsNotes: []
     }
   },
   computed:{
@@ -264,16 +235,38 @@ export default {
           return "Usuario"
           break;
       }
+    },
+    getAllLapses() {
+      return this.$store.getters["lapses/getAllLapses"];
     }
   },
   async created(){
-
+    await this.getLapses()
     await this.getAllSubjects()
     await this.getAllStudents()
     await this.getAllSubjectsGrade()
     await this.getAllStudentsGrade()
+    //this.relationsNotes
+    /* this.infoStudentGrade.map(item => {
+      return {
+        id_student: item.id,
+        
+      }
+    }) */
   },
   methods: {
+    async getLapses(){
+      try {
+        await this.$store.dispatch('lapses/getLapsesAll')
+      } catch (error) {
+          console.log(err)
+          Notify.create(
+            { message: err.message, 
+              type: 'positive', 
+              position: 'top-right'
+          })
+      }
+    },
     removeSubject(param) {
       this.$q.dialog({
         title: 'Eliminar materia del grado',

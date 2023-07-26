@@ -71,6 +71,7 @@
           </q-item-section>
         </q-item>
         <q-item
+          v-if="internalRol === 'Administrador'"
           clickable
           tag="a"
           to="/inicio/usuarios"
@@ -106,6 +107,7 @@
           </q-item-section>
         </q-item> -->
         <q-expansion-item
+          v-if="internalRol === 'Administrador'"
           expand-separator
           icon="event_note"
           label="Inscribir"
@@ -194,7 +196,7 @@
         <q-expansion-item
           expand-separator
           icon="school"
-          label="Académico"
+          :label="internalRol !== 'Docente' ? 'Académico' : 'Planificación académica'"
         >
           <q-card>
             <q-card-section>
@@ -255,10 +257,31 @@
                 </q-item-label>
               </q-item-section>
               </q-item>
+              <q-item
+                  v-if="internalRol === 'Estudiante'"
+                  clickable
+                  tag="a"
+                  disable
+                >
+                  <q-item-section
+                    avatar
+                  >
+                <q-icon name="format_list_bulleted" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Mis Notas</q-item-label>
+
+                <q-item-label caption>
+                  
+                </q-item-label>
+              </q-item-section>
+              </q-item>
             </q-card-section>
           </q-card>
         </q-expansion-item>
         <q-item
+          v-if="internalRol === 'Administrador'"
           clickable
           tag="a"
           href="#"
@@ -271,6 +294,25 @@
 
           <q-item-section>
             <q-item-label>Carga de documentos</q-item-label>
+            <q-item-label caption>
+              <!-- caption menú -->
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          v-if="internalRol === 'Docente'"
+          clickable
+          tag="a"
+          href="#"
+        >
+          <q-item-section
+            avatar
+          >
+            <q-icon name="event" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Calendario académico</q-item-label>
             <q-item-label caption>
               <!-- caption menú -->
             </q-item-label>

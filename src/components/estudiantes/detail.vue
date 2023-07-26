@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-dialog v-model="modalDetailValue" full-width full-height persistent>
+    <q-dialog v-model="modalDetailValue" full-width persistent>
       <q-card>
         <q-bar class="bg-indigo-1">
           <span class="text-center">Estudiante {{ rowData.persona.name }} {{ rowData.persona.surname  }}</span>

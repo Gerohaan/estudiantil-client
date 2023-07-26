@@ -38,7 +38,7 @@
               </q-input>
             </template>
             <template v-slot:body="props">
-              <q-tr :props="props">
+              <q-tr :props="props" v-if="internalRol === 'Administrador' || auth.persona.id === props.row.teacher.persona.id">
                 <q-td key="name" :props="props">
                   {{ props.row.name }}
                 </q-td>
@@ -61,16 +61,17 @@
                   {{ props.row.status }}
                 </q-td>
                 <q-td key="actions" :props="props">
-                  <q-btn @click="modalDetail(true, props.row)" dense padding="none" color="indigo" flat icon="person_search"></q-btn>
-                  <q-btn @click="modalAdd(true, props.row)" dense padding="none" color="indigo" flat icon="edit"></q-btn>
-                  <q-btn @click="removeGrade(props.row.id)" dense padding="none" color="indigo" flat icon="delete"></q-btn>
+                  <q-btn disable @click="modalNotas(true, props.row)" dense  color="indigo" flat icon="format_list_bulleted"></q-btn>
+                  <q-btn @click="modalDetail(true, props.row)" dense  color="indigo" flat icon="person_search"></q-btn>
+                  <q-btn :disable="internalRol !== 'Administrador'" @click="modalAdd(true, props.row)" dense  color="indigo" flat icon="edit"></q-btn>
+                  <q-btn :disable="internalRol !== 'Administrador'" @click="removeGrade(props.row.id)" dense  color="indigo" flat icon="delete"></q-btn>
                 </q-td>
               </q-tr>
             </template>
           </q-table>
         </div>
       </div>
-      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-page-sticky v-if="internalRol === 'Administrador'" position="bottom-right" :offset="[18, 18]">
         <q-btn fab icon="add" color="indigo" @click="modalAdd(true)"/>
       </q-page-sticky>
     </section>
@@ -88,6 +89,13 @@
       @getGrades="getGrades"
       :rowUpdate="rowUpdate" 
     ></detail>
+    <notas
+      v-if="notasValue"
+      :notasValue="notasValue"
+      @modalNotas="modalNotas"
+      @getGrades="getGrades"
+      :rowUpdate="rowUpdate" 
+    ></notas>
   </q-page>
 </template>
 
@@ -96,12 +104,14 @@ import { Dialog } from 'quasar'
 import { Notify } from 'quasar'
 import modalAdd from './modalAdd.vue'
 import detail from './detail.vue'
+import notas from './notas.vue'
 
 export default {
   name: 'index',
   components: {
     modalAdd,
-    detail
+    detail,
+    notas
   },
   props: {
     /* title: {
@@ -113,6 +123,7 @@ export default {
   data(){
     return {
       detailValue: false,
+      notasValue: false,
       filter: '',
       rowUpdate: {},
       initialPagination: {
@@ -253,6 +264,15 @@ export default {
         this.rowUpdate = param2
       }
       this.detailValue = param 
+      if(param === false){
+        this.rowUpdate = {}
+      }
+    },
+    modalNotas(param, param2){
+      if(param2 !== undefined){
+        this.rowUpdate = param2
+      }
+      this.notasValue = param 
       if(param === false){
         this.rowUpdate = {}
       }

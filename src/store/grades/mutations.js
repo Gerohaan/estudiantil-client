@@ -22,6 +22,10 @@ export function setAllSubjectGrades (state, data) {
     state.allSubjectGrades = data
 }
 
+export function setAllStudentsGrades (state, data) {
+    state.allStudentsGrades = data
+}
+
 
 export function spliceNotification (state, idx) {
     state.notifications.splice(idx, 1)
