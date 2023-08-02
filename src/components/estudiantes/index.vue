@@ -38,7 +38,7 @@
               </q-input>
             </template>
             <template v-slot:body="props">
-              <q-tr :props="props">
+              <q-tr :props="props" v-if="internalRol === 'Administrador' || auth.persona.id === props.row.persona.id">
                 <q-td key="name" :props="props">
                   {{ props.row.persona.name }}
                 </q-td>

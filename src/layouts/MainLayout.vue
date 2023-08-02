@@ -107,14 +107,14 @@
           </q-item-section>
         </q-item> -->
         <q-expansion-item
-          v-if="internalRol === 'Administrador'"
           expand-separator
           icon="event_note"
-          label="Inscribir"
+          :label="internalRol === 'Administrador' ? 'Inscribir' : 'Recursos'"
         >
           <q-card>
             <q-card-section>
               <q-item
+                  :disable="internalRol === 'Estudiante'"
                   clickable
                   tag="a"
                   to="/inicio/materias"
@@ -134,6 +134,7 @@
               </q-item-section>
               </q-item>
               <q-item
+                  :disable="internalRol === 'Estudiante'"
                   clickable
                   tag="a"
                   to="/inicio/docentes"
@@ -153,6 +154,7 @@
               </q-item-section>
               </q-item>
               <q-item
+                  v-if="internalRol === 'Estudiante' || internalRol === 'Administrador'"
                   clickable
                   tag="a"
                   to="/inicio/estudiantes"

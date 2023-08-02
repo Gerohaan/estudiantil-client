@@ -46,8 +46,8 @@
                   {{ props.row.description }}
                 </q-td>
                 <q-td key="actions" align="center" class="" :props="props">
-                  <q-btn @click="modalAdd(true, props.row)" dense padding="none" color="indigo" flat icon="edit"></q-btn>
-                  <q-btn @click="deleteSection(props.row.id)" dense padding="none" color="indigo" flat icon="delete"></q-btn>
+                  <q-btn :disable="internalRol !== 'Administrador'" @click="modalAdd(true, props.row)" dense padding="none" color="indigo" flat icon="edit"></q-btn>
+                  <q-btn :disable="internalRol !== 'Administrador'" @click="deleteSection(props.row.id)" dense padding="none" color="indigo" flat icon="delete"></q-btn>
                 </q-td>
               </q-tr>
             </template>
